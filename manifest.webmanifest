@@ -1,9 +1,10 @@
 {
-  "name": "Fuel Dip Calculator",
-  "short_name": "Dip Calculator",
+  "name": "Fuel Dip Calculator \u2014 Staff",
+  "short_name": "Fuel Dip",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f4f7fb",
+  "background_color": "#f3f6fa",
   "theme_color": "#0b5cab",
+  "orientation": "portrait",
   "icons": []
 }
