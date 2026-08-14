@@ -2,139 +2,176 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#0b5cab">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Fuel Dip Calculator</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f4f7fb;color:#17212b}
-*{box-sizing:border-box}
-body{margin:0;background:#f4f7fb}
-.app{max-width:620px;margin:auto;min-height:100vh;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom)}
-header{padding:22px 4px 14px}
-h1{margin:0;font-size:26px}
-.sub{margin:6px 0 0;color:#5d6b78;font-size:14px}
-.card{background:white;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 3px 14px rgba(0,0,0,.07)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
-label{font-weight:700;font-size:15px;display:block;margin-bottom:7px}
-input{width:100%;font-size:22px;padding:13px;border:2px solid #d8e0e8;border-radius:12px;outline:none;background:#fff}
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#15202b;background:#f3f6fa}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#f3f6fa}
+.app{max-width:640px;margin:auto;min-height:100vh;padding:calc(env(safe-area-inset-top) + 10px) 15px calc(env(safe-area-inset-bottom) + 16px)}
+header{text-align:center;padding:10px 4px 16px}
+.logo{width:52px;height:52px;border-radius:15px;background:#0b5cab;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;box-shadow:0 5px 15px rgba(11,92,171,.25)}
+h1{font-size:25px;margin:10px 0 2px}
+.sub{margin:0;color:#667585;font-size:13px}
+.card{background:#fff;border-radius:18px;padding:15px;margin:12px 0;box-shadow:0 4px 16px rgba(21,32,43,.07)}
+.product-title{font-size:18px;font-weight:850;margin-bottom:11px}
+.grid{display:grid;grid-template-columns:1fr 1.18fr;gap:12px;align-items:stretch}
+label{display:block;font-size:12px;font-weight:800;color:#667585;text-transform:uppercase;margin:0 0 6px 2px}
+input{width:100%;height:64px;border:2px solid #d8e1ea;border-radius:14px;padding:0 13px;font-size:27px;font-weight:750;outline:none;background:#fff;color:#15202b}
 input:focus{border-color:#0b5cab}
-.result{background:#eaf6ea;border-radius:12px;padding:12px;min-height:58px}
-.result .litres{font-size:23px;font-weight:800}
-.status{font-size:12px;color:#607080;margin-top:3px}
-button{width:100%;border:0;border-radius:13px;padding:14px;font-size:18px;font-weight:800;background:#0b5cab;color:white;margin-top:14px}
-button:active{transform:scale(.99)}
-.note{font-size:12px;color:#607080;line-height:1.45}
-.bad{color:#a33;font-weight:700}
-footer{text-align:center;color:#758391;font-size:11px;padding:12px 0 24px}
+.result{border-radius:14px;background:#eaf6ea;padding:10px 12px;display:flex;flex-direction:column;justify-content:center}
+.volume{font-size:24px;font-weight:900;line-height:1.1}
+.unit{font-size:11px;font-weight:800;color:#53705a;margin-top:3px}
+.status{font-size:11px;margin-top:5px;color:#5c6a76}
+.ok{color:#287a36;font-weight:800}
+.bad{color:#a43a2d;font-weight:800}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+button{height:50px;border:0;border-radius:13px;font-size:16px;font-weight:850}
+.clear{background:#e9eef4;color:#263746}
+.admin{background:#0b5cab;color:#fff}
+.note{font-size:11px;color:#687887;line-height:1.45;margin:12px 2px 0}
+.version{text-align:center;font-size:10px;color:#8a97a3;margin-top:13px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.48);display:none;align-items:flex-end;justify-content:center;padding:12px}
+.modal.show{display:flex}
+.sheet{background:#fff;width:min(640px,100%);border-radius:20px;padding:18px;max-height:85vh;overflow:auto}
+.sheet h2{margin:0 0 6px}
+.pin{width:100%;height:54px;font-size:24px;text-align:center;letter-spacing:8px;border:2px solid #d8e1ea;border-radius:12px}
+.sheet button{width:100%;margin-top:10px}
+.small{font-size:12px;color:#667585;line-height:1.5}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+td,th{border:1px solid #dce3e9;padding:7px;text-align:left}
+th{background:#eef3f7}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
+  <div class="logo">FD</div>
   <h1>Fuel Dip Calculator</h1>
-  <p class="sub">Daily use • No previous-day storage • MS / HSD / XP95</p>
+  <p class="sub">Daily stock dip • MS / HSD / XP95</p>
 </header>
 
-<section class="card">
-  <div class="row">
-    <div>
-      <label for="ms">MS DIP</label>
-      <input id="ms" inputmode="decimal" placeholder="e.g. 93.4" autocomplete="off">
-    </div>
-    <div class="result">
-      <div class="litres" id="msOut">— L</div>
-      <div class="status" id="msStatus">Enter dip</div>
-    </div>
-  </div>
-</section>
-
-<section class="card">
-  <div class="row">
-    <div>
-      <label for="hsd">HSD DIP</label>
-      <input id="hsd" inputmode="decimal" placeholder="e.g. 69.2" autocomplete="off">
-    </div>
-    <div class="result">
-      <div class="litres" id="hsdOut">— L</div>
-      <div class="status" id="hsdStatus">Enter dip</div>
-    </div>
-  </div>
-</section>
-
-<section class="card">
-  <div class="row">
-    <div>
-      <label for="xp95">XP95 DIP</label>
-      <input id="xp95" inputmode="decimal" placeholder="e.g. 66.3" autocomplete="off">
-    </div>
-    <div class="result">
-      <div class="litres" id="xp95Out">— L</div>
-      <div class="status" id="xp95Status">Enter dip</div>
-    </div>
-  </div>
-</section>
+<div id="cards"></div>
 
 <div class="card">
-  <button id="clear">Clear today's entries</button>
-  <p class="note">
-    Calculation: whole-number DIP uses the chart volume. For .1/.2/.3/.4,
-    the app uses lower volume + [(upper volume − lower volume) ÷ 5 × decimal digit],
-    exactly as your manual method.
-  </p>
-  <p class="note">
-    XP95: the supplied calibration chart contains valid values through DIP 194 only.
-    Values above that are not estimated.
-  </p>
+  <div class="actions">
+    <button class="clear" id="clear">Clear</button>
+    <button class="admin" id="adminBtn">Admin</button>
+  </div>
+  <p class="note">No daily history is saved. Enter only today's DIP readings.</p>
 </div>
 
-<footer>Fuel Dip Calculator • Works offline after installation</footer>
+<div class="version">Staff Version 1.0 • Verified calculation method</div>
 </div>
+
+<div class="modal" id="modal">
+  <div class="sheet" id="sheet"></div>
+</div>
+
 <script src="calibration.js"></script>
 <script>
-const products = {
-  ms: {key:"MS", out:"msOut", status:"msStatus"},
-  hsd:{key:"HSD",out:"hsdOut",status:"hsdStatus"},
-  xp95:{key:"XP95",out:"xp95Out",status:"xp95Status"}
+const PRODUCTS = [
+  {id:"ms", key:"MS", name:"MS"},
+  {id:"hsd", key:"HSD", name:"HSD"},
+  {id:"xp95", key:"XP95", name:"XP95"}
+];
+
+const cards = document.getElementById("cards");
+for (const p of PRODUCTS) {
+  cards.insertAdjacentHTML("beforeend", `
+    <section class="card">
+      <div class="product-title">${p.name}</div>
+      <div class="grid">
+        <div>
+          <label for="${p.id}">DIP</label>
+          <input id="${p.id}" inputmode="decimal" autocomplete="off" placeholder="0.0" aria-label="${p.name} dip">
+        </div>
+        <div class="result">
+          <div class="volume" id="${p.id}Out">—</div>
+          <div class="unit">LITRES</div>
+          <div class="status" id="${p.id}Status">Enter dip</div>
+        </div>
+      </div>
+    </section>`);
+}
+
+function calculate(key, raw) {
+  const s = String(raw ?? "").trim().replace(",", ".");
+  if (!s) return {text:"—", status:"Enter dip", ok:false};
+  const x = Number(s);
+  if (!Number.isFinite(x) || x < 1 || x > 200)
+    return {text:"—", status:"Invalid: DIP must be 1–200", ok:false};
+
+  const whole = Math.floor(x);
+  const frac = Math.round((x - whole) * 10) / 10;
+  const digit = Math.round(frac * 10);
+
+  if (![0,1,2,3,4].includes(digit) || Math.abs(frac - digit/10) > 1e-9)
+    return {text:"—", status:"Use only .0, .1, .2, .3 or .4", ok:false};
+
+  const arr = CALIBRATION[key];
+  const lower = arr[whole - 1];
+  const upper = arr[whole];
+
+  if (lower == null || (digit !== 0 && upper == null))
+    return {text:"—", status:"Not available in supplied chart", ok:false};
+
+  const vol = digit === 0 ? lower : lower + ((upper - lower) / 5) * digit;
+  return {
+    text: vol.toLocaleString("en-IN",{minimumFractionDigits:3,maximumFractionDigits:3}),
+    status:"OK",
+    ok:true
+  };
+}
+
+function update(p) {
+  const r = calculate(p.key, document.getElementById(p.id).value);
+  document.getElementById(p.id+"Out").textContent = r.text;
+  const st = document.getElementById(p.id+"Status");
+  st.textContent = r.status;
+  st.className = "status " + (r.ok ? "ok" : "bad");
+}
+
+PRODUCTS.forEach(p => {
+  document.getElementById(p.id).addEventListener("input", () => update(p));
+});
+
+document.getElementById("clear").onclick = () => {
+  PRODUCTS.forEach(p => {
+    document.getElementById(p.id).value = "";
+    update(p);
+  });
 };
 
-function calc(product, raw){
-  const s = String(raw ?? "").trim().replace(",", ".");
-  if (!s) return {text:"— L", status:"Enter dip"};
-  const x = Number(s);
-  if (!Number.isFinite(x) || x < 1 || x > 200) return {text:"—",status:"Invalid dip"};
-  const whole = Math.floor(x);
-  const frac = Math.round((x-whole)*10)/10;
-  const digit = Math.round(frac*10);
-  if (![0,1,2,3,4].includes(digit) || Math.abs(frac-digit/10)>1e-9)
-    return {text:"—",status:"Use .0, .1, .2, .3 or .4"};
-  const arr = CALIBRATION[product];
-  const lower = arr[whole-1];
-  const upper = arr[whole]; // next whole DIP
-  if (lower == null || (digit !== 0 && upper == null))
-    return {text:"—",status:"Not available in chart"};
-  const vol = digit === 0 ? lower : lower + ((upper-lower)/5)*digit;
-  return {text:vol.toLocaleString("en-IN",{minimumFractionDigits:3,maximumFractionDigits:3})+" L",
-          status:"OK"};
-}
-
-function update(id){
-  const p=products[id];
-  const r=calc(p.key,document.getElementById(id).value);
-  document.getElementById(p.out).textContent=r.text;
-  document.getElementById(p.status).textContent=r.status;
-  document.getElementById(p.status).className="status"+(r.status==="OK"?"":" bad");
-}
-["ms","hsd","xp95"].forEach(id=>{
-  document.getElementById(id).addEventListener("input",()=>update(id));
-  document.getElementById(id).addEventListener("change",()=>update(id));
-});
-document.getElementById("clear").addEventListener("click",()=>{
-  ["ms","hsd","xp95"].forEach(id=>{
-    document.getElementById(id).value="";
-    update(id);
-  });
-});
+const modal = document.getElementById("modal");
+const sheet = document.getElementById("sheet");
+document.getElementById("adminBtn").onclick = () => {
+  sheet.innerHTML = `
+    <h2>Admin</h2>
+    <p class="small">Calibration data is built into this staff release. Normal staff users cannot edit it.</p>
+    <input id="pin" class="pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+    <button id="unlock">Unlock</button>
+    <button id="close" style="background:#e9eef4;color:#263746">Close</button>`;
+  modal.classList.add("show");
+  document.getElementById("close").onclick=()=>modal.classList.remove("show");
+  document.getElementById("unlock").onclick=()=>{
+    const pin=document.getElementById("pin").value;
+    // Temporary default PIN for the first staff build. Change before deployment.
+    if(pin==="2580"){
+      sheet.innerHTML=`
+        <h2>Admin • Calibration</h2>
+        <p class="small"><b>Status:</b> Protected calibration release.</p>
+        <p class="small">MS: DIP 1–200 available<br>HSD: DIP 1–200 available<br>XP95: supplied chart valid through DIP 194.</p>
+        <p class="small">The calculation method is fixed to the verified method: lower chart volume + [(upper − lower) ÷ 5 × decimal digit].</p>
+        <p class="small"><b>Important:</b> This web app's Admin PIN is an operational/accidental-change barrier, not cryptographic security. The calibration data remains part of the app files. For a production deployment with stronger protection, use a signed native app or server-controlled configuration.</p>
+        <button id="close2" style="background:#e9eef4;color:#263746">Close</button>`;
+      document.getElementById("close2").onclick=()=>modal.classList.remove("show");
+    } else alert("Incorrect PIN");
+  };
+};
+modal.addEventListener("click",e=>{if(e.target===modal) modal.classList.remove("show")});
 </script>
 </body>
 </html>
